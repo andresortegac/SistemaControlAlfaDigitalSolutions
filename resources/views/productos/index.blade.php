@@ -47,7 +47,7 @@
 
 <div class="row g-4">
     @forelse($productos as $producto)
-        <div class="col-md-6 col-lg-4">
+        <div class="col-md-6 col-xl-4">
             <div class="card product-card h-100 {{ !$producto->activo ? 'product-inactive' : '' }}">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">

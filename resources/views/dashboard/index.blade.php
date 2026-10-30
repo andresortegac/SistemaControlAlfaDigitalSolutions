@@ -75,7 +75,7 @@
 
 <div class="row g-4 mb-4">
     <div class="col-lg-8">
-        <div class="card">
+        <div class="card h-100">
             <div class="card-header">
                 <h5 class="card-title">
                     <i class="bi bi-graph-up text-primary me-2"></i>
@@ -83,31 +83,33 @@
                 </h5>
             </div>
             <div class="card-body">
-                <canvas
-                    id="ingresosChart"
-                    height="280"
-                    data-labels='@json(array_column($ingresosPorMes, "mes"))'
-                    data-values='@json(array_column($ingresosPorMes, "monto"))'
-                ></canvas>
+                <div class="position-relative" style="height: 280px;">
+                    <canvas
+                        id="ingresosChart"
+                        data-labels='@json(array_column($ingresosPorMes, "mes"))'
+                        data-values='@json(array_column($ingresosPorMes, "monto"))'
+                    ></canvas>
+                </div>
             </div>
         </div>
     </div>
 
     <div class="col-lg-4">
-        <div class="card">
+        <div class="card h-100">
             <div class="card-header">
                 <h5 class="card-title">
                     <i class="bi bi-pie-chart text-success me-2"></i>
                     Distribucion de Licencias
                 </h5>
             </div>
-            <div class="card-body">
-                <canvas
-                    id="licenciasChart"
-                    height="200"
-                    data-labels='@json(array_column($licenciasPorTipo, "name"))'
-                    data-values='@json(array_column($licenciasPorTipo, "value"))'
-                ></canvas>
+            <div class="card-body d-flex flex-column">
+                <div class="position-relative" style="height: 220px;">
+                    <canvas
+                        id="licenciasChart"
+                        data-labels='@json(array_column($licenciasPorTipo, "name"))'
+                        data-values='@json(array_column($licenciasPorTipo, "value"))'
+                    ></canvas>
+                </div>
                 <div class="row mt-4 text-center">
                     <div class="col-6">
                         <h4 class="text-primary mb-0">{{ $stats['compras_totales'] }}</h4>

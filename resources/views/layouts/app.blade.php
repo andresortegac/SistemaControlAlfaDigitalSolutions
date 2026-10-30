@@ -15,6 +15,7 @@
     <meta name="theme-color" content="#0f172a">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="app-shell page-{{ str_replace('.', '-', request()->route()?->getName() ?? 'app') }}">
@@ -104,7 +105,7 @@
         <!-- Content -->
         <div class="content" id="contenido" tabindex="-1">
             @if(session('success'))
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <div data-flash-alert class="alert alert-success alert-dismissible fade show" role="alert">
                     <i class="bi bi-check-circle-fill me-2"></i>
                     {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar aviso"></button>
@@ -112,7 +113,7 @@
             @endif
 
             @if(session('error'))
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div data-flash-alert class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="bi bi-exclamation-circle-fill me-2"></i>
                     {{ session('error') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar aviso"></button>
@@ -127,5 +128,52 @@
             <div class="footer-brand"><img src="{{ asset('images/brand/alfa-logo.png') }}" alt="Alfa" width="595" height="234" loading="lazy"><span>&copy; {{ date('Y') }} Alfa Digital Solutions SAS. Todos los derechos reservados.</span></div>
         </footer>
     </main>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!window.Swal) return;
+            document.querySelectorAll('[data-flash-alert]').forEach((alert) => alert.remove());
+            const Toast = Swal.mixin({
+                toast: true,
+                position: 'top-end',
+                showConfirmButton: false,
+                timer: 3500,
+                timerProgressBar: true,
+                customClass: { popup: 'alfa-toast' },
+                didOpen: (toast) => {
+                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                },
+            });
+
+            @if(session('success'))
+                Toast.fire({ icon: 'success', title: @json(session('success')) });
+            @endif
+
+            @if(session('error'))
+                Toast.fire({ icon: 'error', title: @json(session('error')) });
+            @endif
+
+            @if($errors->any())
+                const errors = @json($errors->all());
+                const errorList = document.createElement('ul');
+                errorList.className = 'text-start mb-0 ps-3';
+                errors.forEach((error) => {
+                    const item = document.createElement('li');
+                    item.textContent = error;
+                    errorList.appendChild(item);
+                });
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Revisa la información',
+                    html: errorList,
+                    confirmButtonText: 'Entendido',
+                    customClass: { popup: 'alfa-swal' },
+                });
+            @endif
+
+        });
+    </script>
+    @stack('scripts')
 </body>
 </html>
