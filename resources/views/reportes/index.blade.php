@@ -3,19 +3,18 @@
 @section('title', 'Reportes Financieros')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="workspace-intro">
     <div>
-        <h4 class="mb-1">Reportes Financieros</h4>
-        <p class="text-muted mb-0">Analisis detallado de ingresos y transacciones</p>
+        <span class="section-eyebrow">ANÁLISIS / FINANZAS</span><h3>Los números detrás de tu negocio</h3><p>Analiza tus ingresos y exporta las transacciones del año seleccionado.</p>
     </div>
     <div class="d-flex gap-2">
         <form action="{{ route('reportes.index') }}" method="GET" class="d-flex gap-2">
-            <select name="anio" class="form-select reportes-year-select">
+            <select aria-label="Seleccionar año del reporte" name="anio" class="form-select reportes-year-select">
                 @foreach($aniosDisponibles as $anio)
                     <option value="{{ $anio }}" {{ $anioSeleccionado == $anio ? 'selected' : '' }}>{{ $anio }}</option>
                 @endforeach
             </select>
-            <button type="submit" class="btn btn-outline-primary">
+            <button type="submit" aria-label="Aplicar año seleccionado" class="btn btn-outline-primary">
                 <i class="bi bi-filter"></i>
             </button>
         </form>

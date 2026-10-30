@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Carbon\Carbon;
 
 class Licencia extends Model
 {
@@ -26,7 +25,7 @@ class Licencia extends Model
         'precio_total',
         'renovacion_automatica',
         'notas',
-        'fecha_creacion'
+        'fecha_creacion',
     ];
 
     protected $casts = [
@@ -35,22 +34,26 @@ class Licencia extends Model
         'fecha_creacion' => 'date',
         'renovacion_automatica' => 'boolean',
         'precio_total' => 'decimal:2',
-        'cantidad_usuarios' => 'integer'
+        'cantidad_usuarios' => 'integer',
     ];
 
     const TIPO_COMPRA = 'compra';
+
     const TIPO_ALQUILER = 'alquiler';
 
     const ESTADO_ACTIVA = 'activa';
+
     const ESTADO_VENCIDA = 'vencida';
+
     const ESTADO_SUSPENDIDA = 'suspendida';
+
     const ESTADO_PENDIENTE = 'pendiente';
 
     public static function getTipos(): array
     {
         return [
             self::TIPO_COMPRA => 'Compra',
-            self::TIPO_ALQUILER => 'Alquiler'
+            self::TIPO_ALQUILER => 'Alquiler',
         ];
     }
 
@@ -60,7 +63,7 @@ class Licencia extends Model
             self::ESTADO_ACTIVA => 'Activa',
             self::ESTADO_VENCIDA => 'Vencida',
             self::ESTADO_SUSPENDIDA => 'Suspendida',
-            self::ESTADO_PENDIENTE => 'Pendiente'
+            self::ESTADO_PENDIENTE => 'Pendiente',
         ];
     }
 
@@ -84,6 +87,11 @@ class Licencia extends Model
         return $this->hasMany(Transaccion::class);
     }
 
+    public function cuotas(): HasMany
+    {
+        return $this->hasMany(Cuota::class);
+    }
+
     public function getTipoLabelAttribute(): string
     {
         return self::getTipos()[$this->tipo] ?? $this->tipo;
@@ -96,23 +104,26 @@ class Licencia extends Model
 
     public function getDiasRestantesAttribute(): ?int
     {
-        if (!$this->fecha_vencimiento) {
+        if (! $this->fecha_vencimiento) {
             return null;
         }
+
         return now()->diffInDays($this->fecha_vencimiento, false);
     }
 
     public function getEstaVencidaAttribute(): bool
     {
-        if (!$this->fecha_vencimiento) {
+        if (! $this->fecha_vencimiento) {
             return false;
         }
+
         return now()->isAfter($this->fecha_vencimiento);
     }
 
     public function getPorVencerAttribute(): bool
     {
         $dias = $this->dias_restantes;
+
         return $dias !== null && $dias <= 30 && $dias > 0;
     }
 
@@ -132,9 +143,9 @@ class Licencia extends Model
     public function scopeVencidas($query)
     {
         return $query->where('estado', self::ESTADO_VENCIDA)
-            ->orWhere(function($q) {
+            ->orWhere(function ($q) {
                 $q->whereNotNull('fecha_vencimiento')
-                  ->where('fecha_vencimiento', '<', now());
+                    ->where('fecha_vencimiento', '<', now());
             });
     }
 
@@ -158,14 +169,17 @@ class Licencia extends Model
         $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
         $clave = '';
         for ($i = 0; $i < 16; $i++) {
-            if ($i > 0 && $i % 4 === 0) $clave .= '-';
+            if ($i > 0 && $i % 4 === 0) {
+                $clave .= '-';
+            }
             $clave .= $chars[random_int(0, strlen($chars) - 1)];
         }
+
         return $clave;
     }
 
     public function getPrecioTotalFormateadoAttribute(): string
     {
-        return '$' . number_format($this->precio_total, 0, ',', '.');
+        return '$'.number_format($this->precio_total, 0, ',', '.');
     }
 }

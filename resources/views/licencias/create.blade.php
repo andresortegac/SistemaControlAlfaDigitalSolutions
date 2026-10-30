@@ -71,7 +71,7 @@
                         <div class="col-md-6" id="duracion_container" data-duration-container>
                             <label for="duracion" class="form-label">Duracion (Alquiler)</label>
                             <select class="form-select @error('duracion') is-invalid @enderror" id="duracion" name="duracion">
-                                <option value="1">1 mes</option>
+                                <option value="1">Mensual (cuotas por calendario; pago inicial pendiente de confirmar)</option>
                                 <option value="3">3 meses</option>
                                 <option value="6">6 meses</option>
                                 <option value="12">1 ano</option>

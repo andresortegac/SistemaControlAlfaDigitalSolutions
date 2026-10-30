@@ -16,7 +16,11 @@ class ReporteController extends Controller
     {
         $anioSeleccionado = $request->input('anio', now()->year);
         
-        $aniosDisponibles = Transaccion::selectRaw('YEAR(fecha) as anio')
+        $anioSql = (new Transaccion)->getConnection()->getDriverName() === 'sqlite'
+            ? "CAST(strftime('%Y', fecha) AS INTEGER)"
+            : 'YEAR(fecha)';
+
+        $aniosDisponibles = Transaccion::selectRaw("{$anioSql} as anio")
             ->distinct()
             ->orderBy('anio', 'desc')
             ->pluck('anio')
@@ -54,7 +58,7 @@ class ReporteController extends Controller
         ];
 
         // Top clientes
-        $topClientes = Cliente::withSum('transacciones', 'monto')
+        $topClientes = Cliente::withSum(['transacciones' => fn ($query) => $query->whereYear('fecha', $anioSeleccionado)], 'monto')
             ->whereHas('transacciones', function($q) use ($anioSeleccionado) {
                 $q->whereYear('fecha', $anioSeleccionado);
             })
@@ -63,7 +67,7 @@ class ReporteController extends Controller
             ->get();
 
         // Top productos
-        $topProductos = Producto::withSum('licencias', 'precio_total')
+        $topProductos = Producto::withSum(['licencias' => fn ($query) => $query->whereYear('fecha_creacion', $anioSeleccionado)], 'precio_total')
             ->orderBy('licencias_sum_precio_total', 'desc')
             ->take(5)
             ->get();

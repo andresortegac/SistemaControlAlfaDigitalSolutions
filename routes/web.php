@@ -21,6 +21,10 @@ use App\Http\Controllers\UsoController;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
+Route::get('/cobros', [\App\Http\Controllers\CobroController::class, 'index'])->name('cobros.index');
+Route::post('/cobros/licencias/{licencia}', [\App\Http\Controllers\CobroController::class, 'activar'])->name('cobros.activar');
+Route::post('/cobros/{cuota}/confirmar', [\App\Http\Controllers\CobroController::class, 'confirmar'])->name('cobros.confirmar');
+
 // Clientes
 Route::resource('clientes', ClienteController::class);
 

@@ -24,7 +24,16 @@ class DashboardController extends Controller
             'compras_totales' => Licencia::porTipo('compra')->count()
         ];
 
-        $ingresosPorMes = Transaccion::selectRaw('MONTH(fecha) as mes, SUM(monto) as total')
+        $stats['cuotas_vencidas'] = \App\Models\Cuota::whereNull('pagada_at')->whereDate('vencimiento', '<', today())->count();
+        $stats['cartera_vencida'] = \App\Models\Cuota::whereNull('pagada_at')->whereDate('vencimiento', '<', today())->sum('monto');
+        $stats['cartera_pendiente'] = \App\Models\Cuota::whereNull('pagada_at')->sum('monto');
+        $stats['avisos'] = \App\Models\Cuota::porRecordar()->count();
+
+        $mesSql = (new Transaccion)->getConnection()->getDriverName() === 'sqlite'
+            ? "CAST(strftime('%m', fecha) AS INTEGER)"
+            : 'MONTH(fecha)';
+
+        $ingresosPorMes = Transaccion::selectRaw("{$mesSql} as mes, SUM(monto) as total")
             ->whereYear('fecha', now()->year)
             ->groupBy('mes')
             ->orderBy('mes')

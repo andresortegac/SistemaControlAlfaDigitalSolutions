@@ -8,6 +8,50 @@
     --danger-color: #ef4444;
 }
 
+.skip-link { position: fixed; top: -80px; left: 1rem; z-index: 2000; padding: .8rem 1rem; background: #fff; color: #1d4ed8; border-radius: 8px; }
+.skip-link:focus { top: 1rem; }
+.nav-section-label { padding: .8rem 1.75rem; font-size: .65rem; letter-spacing: .14em; color: #94a3b8; }
+.sidebar-note { margin: 2rem 1rem 1rem; padding: 1rem; border: 1px solid #334155; border-radius: 12px; display: flex; gap: .7rem; font-size: .75rem; color: #cbd5e1; }
+.sidebar-note small { display: block; margin-top: .3rem; color: #94a3b8; }
+.header-eyebrow, .section-eyebrow { display: block; font-size: .65rem; letter-spacing: .13em; font-weight: 700; color: #64748b; margin-bottom: .4rem; }
+.menu-toggle { display: none; }
+.sidebar-backdrop { position: fixed; inset: 0; border: 0; background: #0f172a80; z-index: 900; }
+.sidebar-backdrop[hidden] { display: none; }
+.workspace-intro { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; margin-bottom: 1.8rem; }
+.workspace-intro h3 { color: #0f172a; font-size: clamp(1.4rem, 2vw, 1.9rem); font-weight: 700; letter-spacing: -.04em; margin-bottom: .5rem; }
+.workspace-intro p { color: #64748b; margin: 0; max-width: 620px; line-height: 1.65; }
+.workspace-actions { display: flex; gap: .6rem; flex-shrink: 0; }
+.filter-panel { padding: 1.3rem; }
+.app-shell .card, .app-shell .stat-card { border: 1px solid #e2e8f0; box-shadow: 0 2px 5px #0f172a04; }
+.app-shell .stat-card { border-top: 3px solid var(--primary-color); border-left: 1px solid #e2e8f0; }
+.app-shell .stat-card.success { border-top-color: var(--success-color); }
+.app-shell .stat-card.danger { border-top-color: var(--danger-color); }
+.app-shell .stat-card.warning { border-top-color: var(--warning-color); }
+.app-shell .btn { font-weight: 600; border-radius: 8px; padding: .6rem 1rem; }
+.app-shell .btn-sm { padding: .35rem .65rem; font-size: .8rem; }
+.app-shell .table tbody tr:hover { background: #f8fafc; }
+.app-shell .stat-value { font-variant-numeric: tabular-nums; letter-spacing: -.035em; overflow-wrap: anywhere; }
+.app-shell :focus-visible { outline: 3px solid #2563eb; outline-offset: 3px; }
+.app-shell .nav-link.active { background: #2563eb; box-shadow: 0 4px 12px #02061730; }
+@media (max-width: 1199.98px) { .workspace-intro { align-items: flex-start; flex-direction: column; } }
+@media (max-width: 991.98px) {
+    .menu-toggle { display: block; float: left; margin-right: .8rem; border: 1px solid #e2e8f0; border-radius: 8px; background: #fff; padding: .5rem .7rem; color: #334155; font-size: 1.2rem; }
+    .navigation-open { overflow: hidden; }
+    .app-shell .header { padding: 1rem; }
+    .app-shell .content { padding: 1.25rem; }
+    .app-shell .header-title h2 { font-size: 1.15rem; }
+    .user-info { display: none; }
+}
+@media (max-width: 575.98px) {
+    .header-eyebrow { display: none; }
+    .workspace-actions { flex-wrap: wrap; }
+    .app-shell .header-actions { gap: .5rem; }
+    .app-shell .content { padding: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .app-shell *, .app-shell *::before, .app-shell *::after { transition: none !important; animation: none !important; }
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -43,6 +87,15 @@ body.app-shell {
     align-items: center;
     gap: 0.75rem;
 }
+
+.brand-official { flex-direction: column; gap: .75rem; text-decoration: none; }
+.brand-image-panel { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 10px 14px; width: 100%; }
+.brand-image-panel img { display: block; width: 100%; height: auto; object-fit: contain; }
+.brand-image-full { height: 148px; padding: 0; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #000; border-color: #1e293b; }
+.brand-image-full img { width: 100%; height: auto; flex-shrink: 0; }
+.brand-caption { color: #cbd5e1; font-size: .63rem; font-weight: 600; letter-spacing: .15em; text-align: center; }
+.footer-brand { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: .8rem; }
+.footer-brand img { width: 64px; height: auto; }
 
 .brand-logo {
     width: 40px;

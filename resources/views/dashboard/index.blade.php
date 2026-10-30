@@ -3,6 +3,16 @@
 @section('title', 'Dashboard')
 
 @section('content')
+<section class="workspace-intro">
+    <div><span class="section-eyebrow">RESUMEN DEL NEGOCIO</span><h3>Una visión clara de tu operación</h3><p>Consulta tus ingresos, administra las licencias y mantén tus cobros al día.</p></div>
+    <div class="workspace-actions"><a class="btn btn-outline-primary" href="{{ route('cobros.index') }}">Revisar mensualidades</a><a class="btn btn-primary" href="{{ route('licencias.create') }}"><i class="bi bi-plus-lg" aria-hidden="true"></i> Nueva licencia</a></div>
+</section>
+<div class="operations-strip">
+    <div class="operations-heading"><span class="status-dot"></span><strong>Agenda de hoy</strong><span>{{ now()->timezone('America/Bogota')->format('d/m/Y') }}</span></div>
+    <a href="{{ route('cobros.index', ['estado' => 'vencidas']) }}"><span class="operation-number">{{ $stats['cuotas_vencidas'] }}</span><span>Cuotas vencidas<small>${{ number_format($stats['cartera_vencida'], 0, ',', '.') }} por recuperar</small></span><i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+    <a href="{{ route('cobros.index') }}"><span class="operation-number">{{ $stats['avisos'] }}</span><span>Cuotas por revisar<small>Próximas a vencer y atrasadas</small></span><i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+    <a href="{{ route('clientes.create') }}"><i class="bi bi-person-plus operation-icon" aria-hidden="true"></i><span>Amplía tu cartera<small>Registrar un nuevo cliente</small></span><i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+</div>
 <div class="row g-4 mb-4">
     <div class="col-md-6 col-lg-3">
         <div class="stat-card">
@@ -30,7 +40,7 @@
                 @if($stats['licencias_por_vencer'] > 0)
                     <span class="text-warning fw-bold">{{ $stats['licencias_por_vencer'] }} por vencer</span>
                 @else
-                    Todas al dia
+                    Todas al día
                 @endif
             </div>
         </div>
@@ -52,7 +62,7 @@
     <div class="col-md-6 col-lg-3">
         <div class="stat-card warning">
             <div class="stat-header">
-                <span class="stat-title">Ingresos del Ano</span>
+                <span class="stat-title">Ingresos del año</span>
                 <div class="stat-icon warning">
                     <i class="bi bi-cart"></i>
                 </div>

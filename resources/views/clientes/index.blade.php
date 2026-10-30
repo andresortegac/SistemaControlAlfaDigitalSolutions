@@ -3,10 +3,9 @@
 @section('title', 'Clientes')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="workspace-intro">
     <div>
-        <h4 class="mb-1">Gestion de Clientes</h4>
-        <p class="text-muted mb-0">Administra tus clientes y su informacion de contacto</p>
+        <span class="section-eyebrow">DIRECTORIO / CLIENTES</span><h3>Relaciones que hacen crecer tu negocio</h3><p>Toda la información de tus clientes, organizada para atenderlos mejor.</p>
     </div>
     <a href="{{ route('clientes.create') }}" class="btn btn-primary">
         <i class="bi bi-plus-lg me-2"></i>Nuevo Cliente

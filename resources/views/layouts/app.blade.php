@@ -1,26 +1,40 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
+    <script>
+        try {
+            const savedTheme = localStorage.getItem('alfa-theme');
+            document.documentElement.dataset.bsTheme = savedTheme === 'light' ? 'light' : 'dark';
+        } catch (_) {}
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Dashboard') - Alfa Digital Solutions</title>
+    <link rel="icon" type="image/png" href="{{ asset('images/brand/alfa-logo.png') }}">
+    <meta name="theme-color" content="#0f172a">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="app-shell page-{{ str_replace('.', '-', request()->route()?->getName() ?? 'app') }}">
     <!-- Sidebar -->
-    <aside class="sidebar">
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <button class="sidebar-backdrop" type="button" aria-label="Cerrar navegación" hidden></button>
+    <aside class="sidebar" id="navigation">
         <div class="sidebar-header">
-            <div class="brand">
-                <div class="brand-logo">A</div>
-                <div class="brand-text">
-                    <h1>Alfa Digital</h1>
-                    <p>Solutions</p>
-                </div>
-            </div>
+            <a class="brand brand-official" href="{{ route('dashboard') }}" aria-label="Alfa Digital Solutions SAS — Ir al inicio">
+                <div class="brand-image-panel brand-image-full"><img src="{{ asset('images/brand/alfa-logo-full.png') }}" alt="Alfa Digital Solutions S.A.S." width="1024" height="1024" fetchpriority="high"></div>
+            </a>
         </div>
 
-        <nav class="nav-menu">
+        <nav class="nav-menu" aria-label="Navegación principal">
+            <p class="nav-section-label">GESTIÓN DEL NEGOCIO</p>
+            <div class="nav-item">
+                <a href="{{ route('cobros.index') }}" class="nav-link {{ request()->routeIs('cobros.*') ? 'active' : '' }}">
+                    <i class="bi bi-calendar-check"></i><span>Mensualidades y avisos</span>
+                </a>
+            </div>
             <div class="nav-item">
                 <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                     <i class="bi bi-grid-fill"></i>
@@ -58,6 +72,7 @@
                 </a>
             </div>
         </nav>
+        <div class="sidebar-note"><i class="bi bi-shield-check" aria-hidden="true"></i><div>Tu operación, en un solo lugar<small>Clientes · licencias · cobros</small></div></div>
     </aside>
 
     <!-- Main Content -->
@@ -65,17 +80,21 @@
         <!-- Header -->
         <header class="header">
             <div class="header-title">
+                <button class="menu-toggle" type="button" aria-label="Abrir navegación" aria-controls="navigation" aria-expanded="false"><i class="bi bi-list" aria-hidden="true"></i></button>
+                <span class="header-eyebrow">PANEL DE ADMINISTRACIÓN</span>
                 <h2>@yield('title', 'Dashboard')</h2>
             </div>
             <div class="header-actions">
-                <button class="btn-notification">
+                <button type="button" class="theme-toggle" aria-label="Cambiar tema" title="Cambiar tema"><i class="bi bi-moon-stars" aria-hidden="true"></i></button>
+                <span class="header-date"><i class="bi bi-calendar3" aria-hidden="true"></i> {{ now()->timezone('America/Bogota')->format('d/m/Y') }}</span>
+                <a href="{{ route('cobros.index') }}" class="btn-notification" aria-label="Avisos de mensualidades">
                     <i class="bi bi-bell"></i>
-                    <span class="badge">3</span>
-                </button>
+                    <span class="badge">{{ \App\Models\Cuota::porRecordar()->count() }}</span>
+                </a>
                 <div class="user-profile">
                     <div class="user-info">
                         <p>Administrador</p>
-                        <span>admin@alfadigital.com</span>
+                        <span>{{ config('cobros.correo') }}</span>
                     </div>
                     <div class="user-avatar">AD</div>
                 </div>
@@ -83,12 +102,12 @@
         </header>
 
         <!-- Content -->
-        <div class="content">
+        <div class="content" id="contenido" tabindex="-1">
             @if(session('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     <i class="bi bi-check-circle-fill me-2"></i>
                     {{ session('success') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar aviso"></button>
                 </div>
             @endif
 
@@ -96,7 +115,7 @@
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
                     <i class="bi bi-exclamation-circle-fill me-2"></i>
                     {{ session('error') }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar aviso"></button>
                 </div>
             @endif
 
@@ -105,7 +124,7 @@
 
         <!-- Footer -->
         <footer class="footer">
-            <p>&copy; {{ date('Y') }} Alfa Digital Solutions SAS. Todos los derechos reservados.</p>
+            <div class="footer-brand"><img src="{{ asset('images/brand/alfa-logo.png') }}" alt="Alfa" width="595" height="234" loading="lazy"><span>&copy; {{ date('Y') }} Alfa Digital Solutions SAS. Todos los derechos reservados.</span></div>
         </footer>
     </main>
 </body>

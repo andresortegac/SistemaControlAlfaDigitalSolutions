@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="mb-4">
-    <h4 class="mb-1">Seguimiento de Uso</h4>
+    <span class="section-eyebrow">ACTIVIDAD / LICENCIAS</span><h3 class="mb-2">La actividad de tus licencias</h3>
     <p class="text-muted mb-0">Monitorea el uso de las licencias por parte de los usuarios</p>
 </div>
 

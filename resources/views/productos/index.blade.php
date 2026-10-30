@@ -3,10 +3,9 @@
 @section('title', 'Productos')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="workspace-intro">
     <div>
-        <h4 class="mb-1">Gestion de Productos</h4>
-        <p class="text-muted mb-0">Administra el catalogo de software disponible</p>
+        <span class="section-eyebrow">CATÁLOGO / PRODUCTOS</span><h3>Tu portafolio de soluciones</h3><p>Administra el catálogo, los precios y la disponibilidad de tu software.</p>
     </div>
     <a href="{{ route('productos.create') }}" class="btn btn-primary">
         <i class="bi bi-plus-lg me-2"></i>Nuevo Producto
@@ -39,31 +38,22 @@
     </div>
 </div>
 
-<div class="row g-4 mb-4">
+<nav class="category-tabs mb-4" aria-label="Filtrar productos por categoría">
+    <a href="{{ route('productos.index', array_filter(['busqueda' => request('busqueda')])) }}" class="category-tab {{ !request('categoria') || request('categoria') === 'todas' ? 'is-active' : '' }}" @if(!request('categoria') || request('categoria') === 'todas') aria-current="page" @endif>Todos <span>{{ $conteos->sum() }}</span></a>
     @foreach($categorias as $key => $label)
-        <div class="col-6 col-md-4 col-lg-2">
-            <div class="card">
-                <div class="card-body d-flex align-items-center">
-                    <span class="fs-2 me-3">{{ $iconos[$key] }}</span>
-                    <div>
-                        <h5 class="mb-0">{{ \App\Models\Producto::porCategoria($key)->count() }}</h5>
-                        <small class="text-muted">{{ $label }}</small>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <a href="{{ route('productos.index', array_filter(['categoria' => $key, 'busqueda' => request('busqueda')])) }}" class="category-tab {{ request('categoria') === $key ? 'is-active' : '' }}" @if(request('categoria') === $key) aria-current="page" @endif>{{ $label }} <span>{{ $conteos[$key] ?? 0 }}</span></a>
     @endforeach
-</div>
+</nav>
 
 <div class="row g-4">
     @forelse($productos as $producto)
         <div class="col-md-6 col-lg-4">
-            <div class="card h-100 {{ !$producto->activo ? 'opacity-50' : '' }}">
+            <div class="card product-card h-100 {{ !$producto->activo ? 'product-inactive' : '' }}">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start mb-3">
                         <div class="d-flex align-items-center">
                             <div class="bg-light rounded p-2 me-3 producto-icon">
-                                {{ $producto->icono }}
+                                <i class="bi bi-{{ $producto->icono }}" aria-hidden="true"></i>
                             </div>
                             <div>
                                 <h6 class="mb-0">{{ $producto->nombre }}</h6>
@@ -99,7 +89,7 @@
 
                     <p class="text-muted mb-3 producto-descripcion">{{ Str::limit($producto->descripcion, 100) }}</p>
 
-                    <div class="row g-2 mb-3">
+                    <div class="row g-2 mb-3 product-prices">
                         <div class="col-4 text-center p-2 bg-light rounded">
                             <small class="text-muted d-block">Compra</small>
                             <strong class="d-block">{{ $producto->getPrecioFormateado('compra') }}</strong>
@@ -115,12 +105,12 @@
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center pt-3 border-top">
-                        <span class="badge bg-{{ $producto->categoria == 'ofimatica' ? 'primary' : ($producto->categoria == 'diseno' ? 'danger' : ($producto->categoria == 'desarrollo' ? 'success' : ($producto->categoria == 'seguridad' ? 'warning' : ($producto->categoria == 'contabilidad' ? 'info' : 'secondary')))) }}">
+                        <span class="product-category">
                             {{ $producto->categoria_label }}
                         </span>
                         <div class="text-end">
                             <small class="text-muted d-block">Licencias</small>
-                            <strong>{{ $producto->licencias->count() }}</strong>
+                            <strong>{{ $producto->licencias_count }}</strong>
                         </div>
                     </div>
                 </div>

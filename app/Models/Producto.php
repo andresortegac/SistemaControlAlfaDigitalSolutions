@@ -55,12 +55,12 @@ class Producto extends Model
     public static function getIconos(): array
     {
         return [
-            self::CATEGORIA_OFIMATICA => '📄',
-            self::CATEGORIA_DISENO => '🎨',
-            self::CATEGORIA_DESARROLLO => '💻',
-            self::CATEGORIA_SEGURIDAD => '🔒',
-            self::CATEGORIA_CONTABILIDAD => '📊',
-            self::CATEGORIA_OTRO => '📦'
+            self::CATEGORIA_OFIMATICA => 'file-earmark-text',
+            self::CATEGORIA_DISENO => 'vector-pen',
+            self::CATEGORIA_DESARROLLO => 'code-square',
+            self::CATEGORIA_SEGURIDAD => 'shield-lock',
+            self::CATEGORIA_CONTABILIDAD => 'bar-chart-line',
+            self::CATEGORIA_OTRO => 'box-seam'
         ];
     }
 
@@ -76,7 +76,7 @@ class Producto extends Model
 
     public function getIconoAttribute(): string
     {
-        return self::getIconos()[$this->categoria] ?? '📦';
+        return self::getIconos()[$this->categoria] ?? 'box-seam';
     }
 
     public function scopeActivos($query)

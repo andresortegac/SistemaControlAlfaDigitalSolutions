@@ -3,10 +3,9 @@
 @section('title', 'Licencias')
 
 @section('content')
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="workspace-intro">
     <div>
-        <h4 class="mb-1">Control de Licencias</h4>
-        <p class="text-muted mb-0">Gestiona las licencias de software de tus clientes</p>
+        <span class="section-eyebrow">OPERACIÓN / LICENCIAS</span><h3>El control de cada licencia</h3><p>Consulta contratos, estados y vencimientos en un solo lugar.</p>
     </div>
     <a href="{{ route('licencias.create') }}" class="btn btn-primary">
         <i class="bi bi-plus-lg me-2"></i>Nueva Licencia
